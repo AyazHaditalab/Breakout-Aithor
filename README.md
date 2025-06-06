@@ -51,7 +51,7 @@ LICENSE
 
 1. Clone the repository:
 
-git clone https://github.com/YourUsername/Breakout-Aithor.git
+git clone https://github.com/AyazHaditalab/Breakout-Aithor.git
 
 2. Open the project with Unity 2021.3 LTS or newer.
 
