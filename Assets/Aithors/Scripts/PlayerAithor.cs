@@ -19,7 +19,6 @@ public class PlayerAithor : MonoBehaviour
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private Vector2 groundCheckBoxSizeOffset;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -33,9 +32,12 @@ public class PlayerAithor : MonoBehaviour
     {
         // Check if player is grounded
         CheckGrounded();
-
+        
         // Control the player's movement
         ControlMovement();
+
+        // Control the player's animation
+        ControlAnimation();
     }
 
     private void ControlMovement()
@@ -73,6 +75,7 @@ public class PlayerAithor : MonoBehaviour
             isJumping = false;
         }
     }
+
     private void CheckGrounded()
     {
         Bounds bounds = boxCollider.bounds;
@@ -83,4 +86,15 @@ public class PlayerAithor : MonoBehaviour
         isGrounded = Physics2D.BoxCast(boxCenter, boxSize, 0f, Vector2.down, groundCheckDistance, groundLayer);
     }
 
+    private void ControlAnimation()
+    {
+        if (myRigidbody.velocity.x > 0 && spriteRenderer.flipX)
+        {
+            spriteRenderer.flipX = false;
+        }
+        else if (myRigidbody.velocity.x < 0 && !spriteRenderer.flipX)
+        {
+            spriteRenderer.flipX = true;
+        }
+    }
 }
