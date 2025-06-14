@@ -7,17 +7,21 @@ public class PlayerAithor : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider;
     private Rigidbody2D myRigidbody;
-    
-    public float moveSpeed;
-    public float jumpForce;
-    public float maxJumpTime;
+
+    [Header("Movement")]
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float acceleration;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float maxJumpTime;
+
     private bool isGrounded;
     private bool isJumping;
     private float jumpTimeCounter;
 
+    [Header("Grounding")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float groundCheckDistance;
-    [SerializeField] private Vector2 groundCheckBoxSizeOffset;
+    [SerializeField] private Vector2 boxSizeOffset;
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +49,9 @@ public class PlayerAithor : MonoBehaviour
         float moveInput = Input.GetAxisRaw("Horizontal");
 
         // Horizontal movement
-        myRigidbody.velocity = new Vector2(moveInput * moveSpeed, myRigidbody.velocity.y);
+        float targetVelocityX = moveInput * moveSpeed;
+        float velocityX = Mathf.Lerp(myRigidbody.velocity.x, targetVelocityX, acceleration * Time.fixedDeltaTime);
+        myRigidbody.velocity = new Vector2(velocityX, myRigidbody.velocity.y);
 
         // Start jump
         if (Input.GetButtonDown("Jump") && isGrounded)
@@ -80,7 +86,7 @@ public class PlayerAithor : MonoBehaviour
     {
         Bounds bounds = boxCollider.bounds;
 
-        Vector2 boxCenter = new Vector2(bounds.center.x, bounds.min.y + groundCheckBoxSizeOffset.y);
+        Vector2 boxCenter = new Vector2(bounds.center.x, bounds.min.y + boxSizeOffset.y);
         Vector2 boxSize = new Vector2(bounds.size.x * 0.9f, 0.05f); // slightly smaller than actual collider width
 
         isGrounded = Physics2D.BoxCast(boxCenter, boxSize, 0f, Vector2.down, groundCheckDistance, groundLayer);
