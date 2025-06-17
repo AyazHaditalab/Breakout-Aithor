@@ -88,7 +88,7 @@ Currently a solo development project for portfolio, but collaborators and contri
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International Licence (CC BY-NC-ND 4.0).
 
 ---
 
