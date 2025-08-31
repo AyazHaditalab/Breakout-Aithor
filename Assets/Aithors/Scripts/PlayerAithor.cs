@@ -22,6 +22,7 @@ public class PlayerAithor : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private Vector2 boxSizeOffset;
+    [SerializeField] private float ceilingCheckDistance;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +37,10 @@ public class PlayerAithor : MonoBehaviour
     {
         // Check if player is grounded
         CheckGrounded();
-        
+
+        // Check if player hit ceiling
+        CheckCeiling();
+
         // Control the player's movement
         ControlMovement();
 
@@ -90,6 +94,25 @@ public class PlayerAithor : MonoBehaviour
         Vector2 boxSize = new Vector2(bounds.size.x * 0.9f, 0.05f); // slightly smaller than actual collider width
 
         isGrounded = Physics2D.BoxCast(boxCenter, boxSize, 0f, Vector2.down, groundCheckDistance, groundLayer);
+    }
+
+    private void CheckCeiling()
+    {
+        Bounds bounds = boxCollider.bounds;
+
+        Vector2 origin = new Vector2(bounds.center.x, bounds.max.y + 0.01f);
+        Vector2 size = new Vector2(bounds.size.x * 0.9f, 0.05f);
+
+        bool hitCeiling = Physics2D.BoxCast(origin, size, 0f, Vector2.up, ceilingCheckDistance, groundLayer);
+
+        if (hitCeiling && isJumping)
+        {
+            isJumping = false;
+            if (myRigidbody.velocity.y > 0)
+            {
+                myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, 0f);
+            }
+        }
     }
 
     private void ControlAnimation()
